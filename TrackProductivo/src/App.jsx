@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Home, Users ,BookMarked,BookUser ,Building2 ,GraduationCap  ,  FolderSearch2  } from "lucide-react";
+import { Home, Users ,BookMarked,BookUser ,Building2 ,GraduationCap  ,  FolderSearch2, BookPlus   } from "lucide-react";
 import Sidebar, { SidebarItem, SidebarAccordion } from "./components/Sidebar";
 import { LoginPage } from './pages/LoginPage';
 import { ProtectedRoute } from './configs/ProtectedRoute';
@@ -21,7 +21,7 @@ const EmpresaPage = lazy(() => import('./pages/EmpresaPage'));
 const EtapaPracticaPage = lazy(() => import('./pages/EtapaPracticaPage'));
 const ReportesPage = lazy(() => import('./pages/ReportesPage'));
 const EstadisticasPage = lazy(() => import('./pages/EstadisticasPage'));
-
+const BitacorasPage = lazy(() => import('./pages/BitacorasPage'));
 
 
 export const App = () => {
@@ -109,7 +109,15 @@ export const App = () => {
             </WithSidebar>
           </ProtectedRoute>
         } />
-  
+      <Route path="/bitacoras" element={
+          <ProtectedRoute>
+            <WithSidebar>
+              <Suspense fallback={<div>Loading...</div>}>
+                <BitacorasPage />
+              </Suspense>
+            </WithSidebar>
+          </ProtectedRoute>
+        } />
 
 
       </Routes>
@@ -128,7 +136,8 @@ const WithSidebar = ({ children }) => (
       <SidebarItem nav="/matriculas" icon={<BookUser  size={20} />} text="Matriculas" />
       <SidebarItem nav="/empresa" icon={<Building2  size={20} />} text="Empresa" />
       <SidebarItem nav="/etapapractica" icon={<GraduationCap   size={20} />} text="Etapa Practica" />
-      
+      <SidebarItem nav="/bitacoras" icon={<BookPlus    size={20} />} text="Bitacoras" />
+
       <SidebarAccordion icon={<FolderSearch2  size={20} />} text="Seguimientos">
         <SidebarItem nav="/reportes" text="Reportes" />
         <SidebarItem nav="/estadisticas" text="Estadisticas" />

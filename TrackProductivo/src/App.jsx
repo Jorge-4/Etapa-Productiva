@@ -8,7 +8,6 @@ import { Navbar2 } from './components/Navbar';
 
 
 
-
 // Lazy load the pages
 // las rutas de todos los modulos [tengo que crear la vista y ubicarlas en el sliderbar]
 //son los modulos de la base de datos pero vamos a dividir en secciones 

@@ -3,6 +3,6 @@ import { validar } from "../controllers/seguridad.controller.js";
 
 const rutaSeguridad = Router();
 
-rutaSeguridad.post("/validacion", validar);
+rutaSeguridad.post("/validate", validar);
 
 export default rutaSeguridad;

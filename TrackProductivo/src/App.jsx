@@ -20,7 +20,7 @@ const EmpresaPage = lazy(() => import('./pages/EmpresaPage'));
 const EtapaPracticaPage = lazy(() => import('./pages/EtapaPracticaPage'));
 const ReportesPage = lazy(() => import('./pages/ReportesPage'));
 const EstadisticasPage = lazy(() => import('./pages/EstadisticasPage'));
-const BitacorasPage = lazy(() => import('./pages/BitacorasPage'));
+
 
 
 export const App = () => {
@@ -108,15 +108,7 @@ export const App = () => {
             </WithSidebar>
           </ProtectedRoute>
         } />
-      <Route path="/bitacoras" element={
-          <ProtectedRoute>
-            <WithSidebar>
-              <Suspense fallback={<div>Loading...</div>}>
-                <BitacorasPage />
-              </Suspense>
-            </WithSidebar>
-          </ProtectedRoute>
-        } />
+  
 
 
       </Routes>
@@ -130,17 +122,20 @@ const WithSidebar = ({ children }) => (
     <Sidebar>
       {/* estas son las secciones de el rol de Coordinador  */}
       <SidebarItem nav="/home" icon={<Home size={20} />} text="Home" />
-      <SidebarItem nav="/nomina" icon={<Users  size={20} />} text="Nomina" />
+      <SidebarItem nav="/nomina" icon={<Users  size={20} />} text="Instructores" />
       <SidebarItem nav="/fichas" icon={<BookMarked  size={20} />} text="Fichas" />
       <SidebarItem nav="/matriculas" icon={<BookUser  size={20} />} text="Matriculas" />
-      <SidebarItem nav="/empresa" icon={<Building2  size={20} />} text="Empresa" />
+      {/* <SidebarItem nav="/empresa" icon={<Building2  size={20} />} text="Empresa" /> */}
       <SidebarItem nav="/etapapractica" icon={<GraduationCap   size={20} />} text="Etapa Practica" />
-      <SidebarItem nav="/bitacoras" icon={<BookPlus    size={20} />} text="Bitacoras" />
+      <SidebarItem nav="/empresa" icon={<FolderSearch2  size={20} />} text="Seguimientos" />
+      <SidebarItem nav="/reportes" text="Reportes" />
+      <SidebarItem nav="/estadisticas" text="Estadisticas" />
 
+
+{/* 
       <SidebarAccordion icon={<FolderSearch2  size={20} />} text="Seguimientos">
-        <SidebarItem nav="/reportes" text="Reportes" />
-        <SidebarItem nav="/estadisticas" text="Estadisticas" />
-      </SidebarAccordion>
+        
+      </SidebarAccordion> */}
       {/* fin de secciones de el rol de Coordinador */}
 
 

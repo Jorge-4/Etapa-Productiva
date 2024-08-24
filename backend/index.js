@@ -21,7 +21,7 @@ servidor.use(cors())
 servidor.use(body_parser.json())
 servidor.use(body_parser.urlencoded({ extended: false }))
 
-servidor.use( rutaSeguridad)
+servidor.use( '/auth', rutaSeguridad)
 servidor.use('/personas', rutaPersona)
 servidor.use('/actividades', rutaActividades)
 servidor.use('/seguimientos', rutaSeguimiento)
@@ -36,6 +36,6 @@ servidor.use('/programa', rutaPrograma)
 
 servidor.use(express.static('./public'))
 
-servidor.listen(3000, () => {
-    console.log('Servidor funcionando en el puerto 3000');
+servidor.listen(4000, () => {
+    console.log('Servidor funcionando en el puerto 4000');
 })

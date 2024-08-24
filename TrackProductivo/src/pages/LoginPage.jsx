@@ -5,12 +5,13 @@ import { Eye, EyeOff } from 'lucide-react';
 import axiosClient from '../configs/axiosClient';
 
 export const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [correo, setcorreo] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [usernameFocused, setUsernameFocused] = useState(false);
+  const [correoFocused, setcorreoFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -25,59 +26,23 @@ export const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+    setError('');
     try {
-      const data = { username, password };
-      // const response = await axiosClient.post('auth/login/', data);
-      
-      // if (response.status === 200) {
-        const token = "acncnask askcnnascnkcasoichnaCKOACN";
+      const data = { correo, password };
+      const response = await axiosClient.post('/auth/validate', data);
+      const token = response.data.token;
+      if (token) {
         localStorage.setItem('token', token);
         navigate("/home");
-      // } else {
-      //   alert("Error al iniciar sesión");
-      // }
+      } else {
+        setError("Error al iniciar sesión: No se recibió token.");
+      }
     } catch (error) {
-      console.error('Error during login:', error);
-      alert("Error al iniciar sesión");
+      console.error('Error durante el inicio de sesión:', error);
+      setError("Error al iniciar sesión: " + (error.response?.data?.detail || 'Error desconocido'));
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleUsernameFocus = () => {
-    setUsernameFocused(true);
-  };
-
-  const handleUsernameBlur = () => {
-    if (!username) {
-      setUsernameFocused(false);
-    }
-  };
-
-  const handlePasswordFocus = () => {
-    setPasswordFocused(true);
-  };
-
-  const handlePasswordBlur = () => {
-    if (!password) {
-      setPasswordFocused(false);
-    }
-  };
-
-  const handleUsernameClick = () => {
-    setUsernameFocused(true);
-  };
-
-  const handlePasswordClick = () => {
-    setPasswordFocused(true);
   };
 
   return (
@@ -98,19 +63,20 @@ export const LoginPage = () => {
                 <input
                   type="text"
                   className="peer w-full rounded border border-gray-300 bg-white px-3 py-2 placeholder-transparent focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500"
-                  id="username"
-                  placeholder="Username"
-                  value={username}
-                  onChange={handleUsernameChange}
-                  onFocus={handleUsernameFocus}
-                  onBlur={handleUsernameBlur}
-                  onClick={handleUsernameClick}
+                  id="correo"
+                  placeholder="correo"
+                  value={correo}
+                  onChange={(e) => setcorreo(e.target.value)}
+                  onFocus={() => setcorreoFocused(true)}
+                  onBlur={() => setcorreo ? setcorreoFocused(true) : setcorreoFocused(false)}
+                  onClick={() => setcorreoFocused(true)}
+                  aria-label="correo"
                 />
                 <label
-                  htmlFor="username"
-                  className={`absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all ${username || usernameFocused ? 'transform -translate-y-4 text-lime-500' : ''}`}
+                  htmlFor="correo"
+                  className={`absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all ${correo || correoFocused ? 'transform -translate-y-4 text-lime-500' : ''}`}
                 >
-                  Username
+                  correo
                 </label>
               </div>
             </div>
@@ -122,15 +88,17 @@ export const LoginPage = () => {
                   id="password"
                   placeholder="Password"
                   value={password}
-                  onChange={handlePasswordChange}
-                  onFocus={handlePasswordFocus}
-                  onBlur={handlePasswordBlur}
-                  onClick={handlePasswordClick}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() => setPassword ? setPasswordFocused(true) : setPasswordFocused(false)}
+                  onClick={() => setPasswordFocused(true)}
+                  aria-label="Password"
                 />
                 <button
                   onClick={togglePasswordVisibility}
                   type="button"
                   className="absolute inset-y-0 right-3 flex items-center"
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -142,12 +110,14 @@ export const LoginPage = () => {
                 </label>
               </div>
             </div>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
             <div className="mb-6">
               <button
                 className="w-full px-6 py-2.5 rounded bg-lime-500 text-white text-sm font-medium leading-normal shadow-md hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-600"
                 type="submit"
+                disabled={loading}
               >
-                Log in
+                {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </button>
             </div>
             <div className="flex justify-between items-center mb-6">

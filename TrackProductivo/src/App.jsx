@@ -131,7 +131,6 @@ const WithSidebar = ({ children }) => (
       <SidebarItem nav="/reportes" text="Reportes" />
       <SidebarItem nav="/estadisticas" text="Estadisticas" />
 
-
 {/* 
       <SidebarAccordion icon={<FolderSearch2  size={20} />} text="Seguimientos">
         

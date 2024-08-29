@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axiosClient from '../configs/axiosClient';
-//import UpdateUser from '../components/secciones/Usuarios/UpdateUser';
+import UpdateUser from '../components/secciones/Usuarios/updateUser';
 
 const PerfilPage = () => {
   const [user, setUser] = useState(null);
@@ -53,9 +53,18 @@ const PerfilPage = () => {
 
   return (
     <div className="p-20">
-      <div className="mb-4 ">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">{user.nombres}</h2>
+      <div className="mb-4 grid grid-cols-2">
+        <div>
+<h2 className="text-2xl font-bold text-gray-800 mb-2">{user.nombres}</h2>
         <p className="text-sm text-gray-500">{user.rol || 'Usuario'}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <UpdateUser user={user} />
+          <UpdateUser user={user} />
+          <span className=' text-red-600'> falta agregar el cambio de contraseña</span>
+        </div>
+      
+        
       </div>
 
       <div className="grid grid-cols-2 gap-4"> 
@@ -98,7 +107,7 @@ const PerfilPage = () => {
         </div>
       </div>
 
-      {/* <UpdateUser  /> */}
+
     </div>
   );
 };

@@ -79,12 +79,6 @@ const GlobalTable = ({ columns, dataEndpoint, updateComponent: UpdateComponent, 
   };
 
 
-  // const renderTableCell = (item, column) => {
-  //   if (column === 'centro_sede') {
-  //     return item.centro_sede?.nombre || '';
-  //   }
-  //   return item[column];
-  // };
 
   return (
     <div>

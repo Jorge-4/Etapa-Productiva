@@ -78,3 +78,46 @@ export const getUserInfo = async (req, res) => {
   }
 };
 
+// Endpoint para actualizar la información del usuario autenticado
+export const updateUser = async (req, res) => {
+  try {
+    const userId = req.user.identificacion; // Suponemos que 'identificacion' es el campo de identificación del usuario
+    const {
+      nombres,
+      correo,
+      telefono,
+      password,
+      rol,
+      cargo,
+      municipio,
+      tipo,
+      sede,
+      area,
+      estado
+    } = req.body; // Datos del usuario a actualizar enviados en el cuerpo de la solicitud
+
+    // Validar que los datos necesarios están presentes
+    if (!nombres || !correo || !telefono || !password ) {
+      return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    }
+
+    // Hashear la nueva contraseña si se proporciona
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Consulta SQL para actualizar los datos del usuario
+    let sql = `
+      UPDATE personas 
+      SET nombres = ?, correo = ?, telefono = ?, password = ?, rol = ?, cargo = ?, municipio = ?, tipo = ?, sede = ?, area = ?, estado = ?
+      WHERE identificacion = ?`;
+    const [result] = await pool.query(sql, [nombres, correo, telefono, hashedPassword, rol, cargo, municipio, tipo, sede, area, estado, userId]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Devolver una respuesta de éxito
+    res.status(200).json({ message: "Usuario actualizado exitosamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error en el servidor: " + error });
+  }
+};

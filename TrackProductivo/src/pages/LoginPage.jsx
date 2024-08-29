@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from "../assets/img/logo-sena-verde.png";
+import logo from "../../public/LOGOTIC.png";
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import axiosClient from '../configs/axiosClient';
@@ -28,14 +28,15 @@ export const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const data = { correo, password };
-      const response = await axiosClient.post('/auth/validate', data);
-      const token = response.data.token;
-      if (token) {
+      const response = await axiosClient.post('/auth/validate', { correo, password });
+      const { token, user } = response.data;
+      
+      if (token && user) {
         localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
         navigate("/home");
       } else {
-        setError("Error al iniciar sesión: No se recibió token.");
+        setError("Error al iniciar sesión: No se recibió token o usuario.");
       }
     } catch (error) {
       console.error('Error durante el inicio de sesión:', error);

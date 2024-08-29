@@ -6,20 +6,23 @@ import bcrypt from 'bcrypt';
 // Middleware para validar el token
 export const validarToken = async (req, res, next) => {
   try {
-    let tokenClient = req.headers['token'];
+    // Obtener el token desde el encabezado Authorization
+    const authHeader = req.headers['authorization'];
 
-    if (!tokenClient) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(403).json({ 'message': 'Token es requerido' });
-    } else {
-      jwt.verify(tokenClient, process.env.AUT_SECRET, (error, decoded) => {
-        if (error) {
-          return res.status(403).json({ message: 'Token no válido' });
-        } else {
-          req.user = decoded.rows[0]; // Guardamos el usuario decodificado en req.user
-          next();
-        }
-      });
     }
+
+    const token = authHeader.split(' ')[1]; // Extraer el token después de 'Bearer'
+
+    jwt.verify(token, process.env.AUT_SECRET, (error, decoded) => {
+      if (error) {
+        return res.status(403).json({ message: 'Token no válido' });
+      } else {
+        req.user = decoded.rows[0]; // Guardamos la información del usuario decodificada en req.user
+        next();
+      }
+    });
   } catch (error) {
     return res.status(500).json({ status: 500, message: 'Error del servidor: ' + error });
   }
@@ -74,3 +77,4 @@ export const getUserInfo = async (req, res) => {
     res.status(500).json({ message: "Error en el servidor: " + error });
   }
 };
+

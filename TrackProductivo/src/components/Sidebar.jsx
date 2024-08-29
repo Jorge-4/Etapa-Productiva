@@ -1,5 +1,5 @@
 import { ChevronFirst, ChevronLast, Power, ChevronDown, ChevronUp } from "lucide-react";
-import logo from "../assets/img/logo-sena-verde.png";
+import logo from "../../public/LOGOTIC.png";
 import { createContext, useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ModalLogout } from "../configs/ModalLogout";

@@ -20,7 +20,7 @@ const EmpresaPage = lazy(() => import('./pages/EmpresaPage'));
 const EtapaPracticaPage = lazy(() => import('./pages/EtapaPracticaPage'));
 const ReportesPage = lazy(() => import('./pages/ReportesPage'));
 const EstadisticasPage = lazy(() => import('./pages/EstadisticasPage'));
-
+const PerfilPage = lazy(() => import('./pages/PerfilPage'));
 
 
 export const App = () => {
@@ -108,8 +108,16 @@ export const App = () => {
             </WithSidebar>
           </ProtectedRoute>
         } />
-  
-
+        
+        <Route path="/perfil" element={
+          <ProtectedRoute>
+            <WithSidebar>
+              <Suspense fallback={<div>Loading...</div>}>
+                <PerfilPage/>
+              </Suspense>
+            </WithSidebar>
+          </ProtectedRoute>
+        } />
 
       </Routes>
       

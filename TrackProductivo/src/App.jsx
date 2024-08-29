@@ -13,10 +13,10 @@ import { Navbar2 } from './components/Navbar';
 //son los modulos de la base de datos pero vamos a dividir en secciones 
 
 const HomePage = lazy(() => import('./pages/HomePage'));
-const NominaPage = lazy(() => import('./pages/NominaPage'));
+const InstructoresPage = lazy(() => import('./pages/InstructoresPage'));
 const FichasPage = lazy(() => import('./pages/FichasPage'));
 const MatriculasPage = lazy(() => import('./pages/MatriculasPage'));
-const EmpresaPage = lazy(() => import('./pages/EmpresaPage'));
+const SeguimientoPage = lazy(() => import('./pages/seguimientoPage'));
 const EtapaPracticaPage = lazy(() => import('./pages/EtapaPracticaPage'));
 const ReportesPage = lazy(() => import('./pages/ReportesPage'));
 const EstadisticasPage = lazy(() => import('./pages/EstadisticasPage'));
@@ -39,11 +39,11 @@ export const App = () => {
           </ProtectedRoute>
         } />
 
-        <Route path="/nomina" element={
+        <Route path="/instructores" element={
           <ProtectedRoute>
             <WithSidebar>
               <Suspense fallback={<div>Loading...</div>}>
-                <NominaPage />
+                <InstructoresPage />
               </Suspense>
             </WithSidebar>
           </ProtectedRoute>
@@ -69,11 +69,11 @@ export const App = () => {
           </ProtectedRoute>
         } />
 
-        <Route path="/empresa" element={
+        <Route path="/seguimientos" element={
           <ProtectedRoute>
             <WithSidebar>
               <Suspense fallback={<div>Loading...</div>}>
-                <EmpresaPage />
+               <SeguimientoPage/>
               </Suspense>
             </WithSidebar>
           </ProtectedRoute>
@@ -130,12 +130,12 @@ const WithSidebar = ({ children }) => (
     <Sidebar>
       {/* estas son las secciones de el rol de Coordinador  */}
       <SidebarItem nav="/home" icon={<Home size={20} />} text="Home" />
-      <SidebarItem nav="/nomina" icon={<Users  size={20} />} text="Instructores" />
+      <SidebarItem nav="/instructores" icon={<Users  size={20} />} text="Instructores" />
       <SidebarItem nav="/fichas" icon={<BookMarked  size={20} />} text="Fichas" />
       <SidebarItem nav="/matriculas" icon={<BookUser  size={20} />} text="Matriculas" />
       {/* <SidebarItem nav="/empresa" icon={<Building2  size={20} />} text="Empresa" /> */}
       <SidebarItem nav="/etapapractica" icon={<GraduationCap   size={20} />} text="Etapa Practica" />
-      <SidebarItem nav="/empresa" icon={<FolderSearch2  size={20} />} text="Seguimientos" />
+      <SidebarItem nav="/seguimientos" icon={<FolderSearch2  size={20} />} text="Seguimientos" />
       <SidebarItem nav="/reportes" text="Reportes" />
       <SidebarItem nav="/estadisticas" text="Estadisticas" />
 

@@ -1,12 +1,12 @@
 import React from 'react';
 //import registerFichas from '../components/secciones/Fichas/registerFichas';
-import GlobalTable from '../components/componets_globals/GlobalTable';
+import GlobalTable from '../../componets_globals/GlobalTable';
 //import updateFichas from '../components/secciones/Fichas/updateFichas';
 //import deleteFichas from '../components/secciones/Fichas/deleteFichas'; // Asegúrate de importar correctamente el componente DeleteArea
-import CardComponent from '../components/CardComponent';
+import CardComponent from '../../CardComponent';
 
 
-function FichasPage() {
+function TableEmpresas() {
   const columns = [
     'codigo',
     'inicio_ficha',
@@ -41,4 +41,4 @@ function FichasPage() {
 };
 
 
-export default FichasPage
+export default TableEmpresas

@@ -58,13 +58,13 @@ export const Navbar2 = ({ title }) => {
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link href="/nomina" aria-current="page" className={getLinkClasses('/nomina')}>
-                Movimientos
+              <Link href="/instructores" aria-current="page" className={getLinkClasses('/instructores')}>
+              Instructores
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link href="/fichas" className={getLinkClasses('/fichas')}>
-                Usuarios
+              <Link href="/seguimientos" className={getLinkClasses('/seguimientos')}>
+              Seguimientos
               </Link>
             </NavbarItem>
           </NavbarContent>

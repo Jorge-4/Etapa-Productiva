@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 //import registerFichas from '../components/secciones/Fichas/registerFichas';
 import GlobalTable from '../components/componets_globals/GlobalTable';
 //import updateFichas from '../components/secciones/Fichas/updateFichas';
@@ -6,7 +6,7 @@ import GlobalTable from '../components/componets_globals/GlobalTable';
 import CardComponent from '../components/CardComponent';
 
 
-function FichasPage() {
+function InstructoresPage() {
   const columns = [
     'codigo',
     'inicio_ficha',
@@ -40,5 +40,4 @@ function FichasPage() {
   );
 };
 
-
-export default FichasPage
+export default InstructoresPage

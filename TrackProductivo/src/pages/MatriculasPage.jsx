@@ -8,14 +8,13 @@ import CardComponent from '../components/CardComponent';
 
 function MatriculasPage() {
   const columns = [
-    'codigo',
-    'inicio_ficha',
-    'fin_lectiva',
-    'fin_ficha',
-    'programa',
-    'sede',
-    'estado'
-    
+    'ficha',
+    'aprendiz',
+    'estado',
+    'pendiente_tecnicos',
+    'pendientes_trasversales',
+    'pendiente_ingles',
+ 
   ];
 
 
@@ -25,11 +24,11 @@ function MatriculasPage() {
       <main className='w-full p-3 h-screen'>
         <div className='my-5 flex flex-col py-5'>
 
-          <CardComponent title="Fichas Registradas"  />
+          <CardComponent title="Matriculas Registradas"  />
           {/* <RegisterArea /> */}
           <GlobalTable 
             columns={columns} 
-            dataEndpoint="/fichas/listar" 
+            dataEndpoint="/matriculas/listar" 
             //updateComponent={UpdateArea} 
             //deleteComponent={DeleteArea} 
           />

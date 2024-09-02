@@ -8,12 +8,12 @@ import CardComponent from '../../CardComponent';
 
 function TableEmpresas() {
   const columns = [
-    'codigo',
-    'inicio_ficha',
-    'fin_lectiva',
-    'fin_ficha',
-    'programa',
-    'sede',
+    'razon_social',
+    'direccion',
+    'telefono',
+    'correo',
+    'municipio',
+    'jefe_inmediato',
     'estado'
     
   ];
@@ -25,11 +25,11 @@ function TableEmpresas() {
       <main className='w-full p-3 h-screen'>
         <div className='my-5 flex flex-col py-5'>
 
-          <CardComponent title="Fichas Registradas"  />
+          <CardComponent title="Empresas Registradas"  />
           {/* <RegisterArea /> */}
           <GlobalTable 
             columns={columns} 
-            dataEndpoint="/fichas/listar" 
+            dataEndpoint="/empresas/listar" 
             //updateComponent={UpdateArea} 
             //deleteComponent={DeleteArea} 
           />

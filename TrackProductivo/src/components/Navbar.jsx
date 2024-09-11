@@ -1,54 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { User } from "@nextui-org/user";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Input } from "@nextui-org/react";
-import { SearchIcon } from 'lucide-react';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link } from "@nextui-org/react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import axiosClient from '../configs/axiosClient'; // Asegúrate de que el path es correcto
+import axiosClient from '../configs/axiosClient';
 
-export const Navbar2 = ({ title }) => {
+export const Navbar2 = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // Inicializar el hook de navegación
-  const [user, setUser] = useState(null); // Estado para almacenar los datos del usuario
-  const [loading, setLoading] = useState(true); // Estado de carga
-  const [error, setError] = useState(null); // Estado de error
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axiosClient.get('/auth/me');
-        setUser(response.data.user); // Ajuste aquí para acceder a la propiedad correcta
-        setError(null);
-      } catch (error) {
-        console.error('Error al obtener los datos del usuario:', error);
-        setError('No se pudo cargar los datos del usuario.');
-        if (error.response && error.response.status === 401) {
-          localStorage.removeItem('token');
-          window.location.href = '/';
-        }
-      } finally {
-        setLoading(false);
+  const fetchUserData = useCallback(async () => {
+    try {
+      const response = await axiosClient.get('/auth/me');
+      setUser(response.data.user);
+      setError(null);
+    } catch (error) {
+      console.error('Error al obtener los datos del usuario:', error);
+      setError('No se pudo cargar los datos del usuario.');
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/';
       }
-    };
-
-    fetchUserData();
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Determinar si el enlace es activo
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
   const getLinkClasses = (path) =>
     location.pathname === path 
       ? "text-lime-500 border-b-2 border-lime-500" 
       : "text-gray-600 dark:text-gray-300";
 
-  const handleUserClik = () =>{
+  const handleUserClick = () => {
     navigate('/perfil');
-  }
+  };
+
   return (
     <nav className="sticky top-0 z-20 w-full bg-white shadow-md dark:bg-neutral-800">
       <Navbar className="bg-white dark:bg-neutral-800 rounded-md">
         <NavbarContent justify="start" className="px-4">
           <NavbarBrand className="mr-4 flex items-center">
             <p className="hidden sm:block font-bold text-xl text-gray-800 dark:text-white">
-            TrackProductivo
+              TrackProductivo
             </p>
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4">
@@ -59,12 +58,12 @@ export const Navbar2 = ({ title }) => {
             </NavbarItem>
             <NavbarItem>
               <Link href="/instructores" aria-current="page" className={getLinkClasses('/instructores')}>
-              Instructores
+                Instructores
               </Link>
             </NavbarItem>
             <NavbarItem>
               <Link href="/seguimientos" className={getLinkClasses('/seguimientos')}>
-              Seguimientos
+                Seguimientos
               </Link>
             </NavbarItem>
           </NavbarContent>
@@ -75,17 +74,17 @@ export const Navbar2 = ({ title }) => {
             {loading ? (
               <div>Cargando usuario...</div>
             ) : error ? (
-              <div className="text-red-500">{error}</div> // Muestra el error si hay
+              <div className="text-red-500">{error}</div>
             ) : (
               <User
-                name={user.nombres} // Asegúrate de que 'username' esté presente en la respuesta
-                description={user.rol || 'Usuario'} // Asegúrate de que 'Rol_persona' esté presente
-                avatarSrc="https://via.placeholder.com/150" // Asegúrate de que 'avatar' esté presente
+                name={user.nombres}
+                description={user.rol || 'Usuario'}
+                avatarSrc="https://via.placeholder.com/150"
                 bordered
                 as="button"
                 size="sm"
                 color="primary"
-                onClick={handleUserClik}
+                onClick={handleUserClick}
               />
             )}
           </div>

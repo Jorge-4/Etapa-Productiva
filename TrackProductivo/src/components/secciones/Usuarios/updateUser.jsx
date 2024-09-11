@@ -4,8 +4,8 @@ import axiosClient from "../../../configs/axiosClient";
 import GlobalAlert from "../../componets_globals/GlobalAlert";
 import GlobalModal from "../../componets_globals/GlobalModal";
 
-export const UpdateUser = () => {
-  const [isOpen, setIsOpen] = useState(false); // Manejo del estado del modal
+export const UpdateUser = ({ user, onUpdateSuccess }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState({
     identificacion: "",
     nombres: "",
@@ -22,7 +22,6 @@ export const UpdateUser = () => {
   });
   const [error, setError] = useState("");
 
-  // Función para manejar los cambios en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
@@ -31,38 +30,35 @@ export const UpdateUser = () => {
     }
   };
 
-  // Función para abrir el modal y cargar datos actuales del usuario
-  const handleOpenModal = async () => {
-    try {
-      const response = await axiosClient.get('/auth/me');
-      setUserData(response.data.user); // Asegúrate de que los datos se carguen correctamente
-      setIsOpen(true);
-    } catch (error) {
-      console.error('Error al obtener los datos del usuario:', error);
-      GlobalAlert.error('No se pudieron cargar los datos del usuario. ' + (error.response?.data?.message || 'Error del servidor.'));
-    }
+  const handleOpenModal = () => {
+    setUserData({...user, password: ""});
+    setIsOpen(true);
   };
 
-  // Función para manejar la actualización de los datos del usuario
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Verificar si algún campo requerido está vacío
-    if (!userData.nombres || !userData.correo || !userData.telefono || !userData.password) {
-      setError("Todos los campos son obligatorios.");
+    if (!userData.nombres || !userData.correo || !userData.telefono) {
+      setError("Todos los campos son obligatorios, excepto la contraseña si no desea cambiarla.");
       return;
     }
 
     try {
-      const response = await axiosClient.put("/auth/me", userData); // Asegúrate de usar el endpoint correcto
+      const dataToSend = {...userData};
+      if (!dataToSend.password) {
+        delete dataToSend.password;
+      }
+      
+      const response = await axiosClient.put("/auth/me", dataToSend);
       console.log("Respuesta del servidor:", response.data);
       GlobalAlert.success("Perfil actualizado correctamente.");
-      setIsOpen(false); // Cierra el modal después de enviar la petición
-      window.location.reload();
+      setIsOpen(false);
+      if (onUpdateSuccess) {
+        onUpdateSuccess();
+      }
     } catch (error) {
       console.error("Error al actualizar el perfil:", error);
       GlobalAlert.error("Hubo un error al actualizar el perfil. " + (error.response?.data?.message || "Error interno del servidor."));
-      
     }
   };
 
@@ -118,27 +114,16 @@ export const UpdateUser = () => {
                 onChange={handleInputChange}
                 required
               />
-        
-    
               <Input
-                id="municipio"
-                name="municipio"
-                type="text"
-                label="Municipio"
-                placeholder="Ingrese el municipio"
-                value={userData.municipio}
+                id="password"
+                name="password"
+                type="password"
+                label="Contraseña"
+                placeholder="Ingrese una nueva contraseña para mas seguridad"
+                value={userData.password}
                 onChange={handleInputChange}
               />
-          
-              <Input
-                id="estado"
-                name="estado"
-                type="text"
-                label="Estado"
-                placeholder="Ingrese el estado"
-                value={userData.estado}
-                onChange={handleInputChange}
-              />
+
               {error && <p className="text-red-500">{error}</p>}
               <Button color="primary" type="submit">
                 Actualizar

@@ -1,30 +1,32 @@
 // Importar módulos necesarios
-import { pool } from './../database/conexion.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import { pool } from "./../database/conexion.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 // Middleware para validar el token
 export const validarToken = async (req, res, next) => {
   try {
     // Obtener el token desde el encabezado Authorization
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers["authorization"];
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(403).json({ 'message': 'Token es requerido' });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(403).json({ message: "Token es requerido" });
     }
 
-    const token = authHeader.split(' ')[1]; // Extraer el token después de 'Bearer'
+    const token = authHeader.split(" ")[1]; // Extraer el token después de 'Bearer'
 
     jwt.verify(token, process.env.AUT_SECRET, (error, decoded) => {
       if (error) {
-        return res.status(403).json({ message: 'Token no válido' });
+        return res.status(403).json({ message: "Token no válido" });
       } else {
         req.user = decoded.rows[0]; // Guardamos la información del usuario decodificada en req.user
         next();
       }
     });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: 'Error del servidor: ' + error });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Error del servidor: " + error });
   }
 };
 
@@ -38,7 +40,7 @@ export const validar = async (req, res) => {
     if (rows.length === 0) {
       return res.status(404).json({ message: "Correo incorrecto" });
     }
-    
+
     const user = rows[0];
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
@@ -62,8 +64,10 @@ export const getUserInfo = async (req, res) => {
 
     // Consulta SQL para obtener los datos del usuario
     let sql = `
-      SELECT identificacion, nombres, correo, telefono, password, rol, cargo, municipio, tipo, sede, area, estado 
-      FROM personas 
+      SELECT p.*, m.*, a.*
+      FROM personas p
+      INNER JOIN municipios m ON p.municipio = m.id_municipio
+      INNER JOIN areas a ON p.area = a.id_area
       WHERE identificacion = ?`;
     const [rows] = await pool.query(sql, [userId]);
 
@@ -81,7 +85,7 @@ export const getUserInfo = async (req, res) => {
 // Endpoint para actualizar la información del usuario autenticado
 export const updateUser = async (req, res) => {
   try {
-    const userId = req.user.identificacion; // Suponemos que 'identificacion' es el campo de identificación del usuario
+    const userId = req.user.identificacion; //  'identificacion' es el campo de identificación del usuario
     const {
       nombres,
       correo,
@@ -93,14 +97,13 @@ export const updateUser = async (req, res) => {
       tipo,
       sede,
       area,
-      estado
+      estado,
     } = req.body; // Datos del usuario a actualizar enviados en el cuerpo de la solicitud
 
     // Validar que los datos necesarios están presentes
-    if (!nombres || !correo || !telefono || !password ) {
+    if (!nombres || !correo || !rol || !password) {
       return res.status(400).json({ message: "Todos los campos son obligatorios" });
     }
-
     // Hashear la nueva contraseña si se proporciona
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -109,7 +112,20 @@ export const updateUser = async (req, res) => {
       UPDATE personas 
       SET nombres = ?, correo = ?, telefono = ?, password = ?, rol = ?, cargo = ?, municipio = ?, tipo = ?, sede = ?, area = ?, estado = ?
       WHERE identificacion = ?`;
-    const [result] = await pool.query(sql, [nombres, correo, telefono, hashedPassword, rol, cargo, municipio, tipo, sede, area, estado, userId]);
+    const [result] = await pool.query(sql, [
+      nombres,
+      correo,
+      telefono,
+      hashedPassword,
+      rol,
+      cargo,
+      municipio,
+      tipo,
+      sede,
+      area,
+      estado,
+      userId,
+    ]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Usuario no encontrado" });
@@ -121,3 +137,5 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: "Error en el servidor: " + error });
   }
 };
+
+

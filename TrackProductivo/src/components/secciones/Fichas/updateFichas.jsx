@@ -19,14 +19,17 @@ const ActualizarFicha = ({ item, onClose, refreshData }) => {
 
   useEffect(() => {
     if (item) {
+      console.log("Item recibido:", item);
       const formatDate = (dateString) => dateString ? new Date(dateString).toISOString().split('T')[0] : "";
 
       setFichaData({
-        ...item,
+        codigo: item.codigo ? item.codigo.toString() : "",
         inicio_ficha: formatDate(item.inicio_ficha),
         fin_lectiva: formatDate(item.fin_lectiva),
         fin_ficha: formatDate(item.fin_ficha),
-        programa: item.programa.toString()
+        programa: item.programa ? item.programa.toString() : "",
+        sede: item.sede || "",
+        estado: item.estado || ""
       });
     }
     fetchProgramas();
@@ -44,34 +47,73 @@ const ActualizarFicha = ({ item, onClose, refreshData }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFichaData({ ...fichaData, [name]: value });
+    setFichaData(prevData => {
+      const newData = { ...prevData, [name]: value };
+      console.log("Datos actualizados:", newData);
+      return newData;
+    });
     setError("");
+  };
+
+  const validateDates = () => {
+    const inicio = new Date(fichaData.inicio_ficha);
+    const finLectiva = new Date(fichaData.fin_lectiva);
+    const finFicha = fichaData.fin_ficha ? new Date(fichaData.fin_ficha) : null;
+
+    if (finLectiva <= inicio) {
+      setError("La fecha de fin lectiva debe ser posterior a la fecha de inicio.");
+      return false;
+    }
+
+    if (finFicha && finFicha <= finLectiva) {
+      setError("La fecha de fin de ficha debe ser posterior a la fecha de fin lectiva.");
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!fichaData.inicio_ficha || !fichaData.fin_lectiva || !fichaData.programa || !fichaData.sede || !fichaData.estado) {
+    console.log("Iniciando actualización de ficha. Datos actuales:", fichaData);
+
+    if (!fichaData.codigo || !fichaData.inicio_ficha || !fichaData.fin_lectiva || !fichaData.programa || !fichaData.sede || !fichaData.estado) {
       setError("Todos los campos son obligatorios excepto Fin de Ficha");
+      console.error("Error de validación: Campos incompletos", fichaData);
       return;
     }
+
+    if (!validateDates()) {
+      console.error("Error de validación: Fechas inválidas", fichaData);
+      return;
+    }
+
     try {
-      console.log('Enviando datos al servidor:', fichaData);
-      const response = await axiosClient.put(`/fichas/actualizar/${fichaData.codigo}`, {
+      console.log(`Actualizando ficha con código: ${fichaData.codigo}`);
+      const dataToSend = {
+        codigo: fichaData.codigo,
         inicio_ficha: fichaData.inicio_ficha,
         fin_lectiva: fichaData.fin_lectiva,
         fin_ficha: fichaData.fin_ficha || null,
         programa: parseInt(fichaData.programa),
         sede: fichaData.sede,
         estado: fichaData.estado
-      });
+      };
+      console.log("Datos a enviar:", dataToSend);
+
+      const response = await axiosClient.put(`/fichas/actualizar/${fichaData.codigo}`, dataToSend);
+      
       console.log("Respuesta del servidor:", response.data);
       GlobalAlert.success("Ficha actualizada correctamente.");
       refreshData();
       onClose();
     } catch (error) {
-      console.error("Error al actualizar la ficha:", error);
+      console.error("Error completo:", error);
       console.error("Respuesta del servidor:", error.response?.data);
-      GlobalAlert.error("Error al actualizar la ficha: " + (error.response?.data?.message || error.message || "Error interno del servidor."));
+      console.error("Estado de la respuesta:", error.response?.status);
+      console.error("Headers de la respuesta:", error.response?.headers);
+      const errorMessage = error.response?.data?.message || error.message || "Error desconocido";
+      GlobalAlert.error(`Error al actualizar la ficha: ${errorMessage}`);
     }
   };
 
@@ -85,7 +127,8 @@ const ActualizarFicha = ({ item, onClose, refreshData }) => {
           <Input
             label="Código de Ficha"
             value={fichaData.codigo}
-            isReadOnly
+            onChange={(e) => handleInputChange({ target: { name: 'codigo', value: e.target.value } })}
+            required
           />
           <Input
             label="Inicio de Ficha"

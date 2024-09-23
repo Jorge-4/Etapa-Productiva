@@ -134,11 +134,11 @@ const GlobalTable = ({ columns, dataEndpoint, updateComponent: UpdateComponent, 
       </div>
       {isUpdateModalOpen && selectedItem && (
         <UpdateComponent 
-          item={selectedItem.id} 
+          item={selectedItem} 
           onClose={() => setIsUpdateModalOpen(false)} 
           refreshData={() => {
-            setIsUpdateModalOpen(false);
-            refreshData();
+          setIsUpdateModalOpen(false);
+          refreshData();
           }} 
         />
       )}

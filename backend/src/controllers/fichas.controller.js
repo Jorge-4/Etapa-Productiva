@@ -62,7 +62,6 @@ export const actualizarFicha = async (req, res) => {
             programa = ?, sede = ?, estado = ?
         WHERE codigo = ?
     `;
-
     try {
         const [result] = await pool.query(sql, [inicio_ficha, fin_lectiva, fin_ficha, programa, sede, estado, codigo]);
 

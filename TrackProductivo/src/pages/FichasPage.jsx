@@ -1,44 +1,24 @@
 import React from 'react';
-//import registerFichas from '../components/secciones/Fichas/registerFichas';
-import GlobalTable from '../components/componets_globals/GlobalTable';
-//import updateFichas from '../components/secciones/Fichas/updateFichas';
-//import deleteFichas from '../components/secciones/Fichas/deleteFichas'; // Asegúrate de importar correctamente el componente DeleteArea
-import CardComponent from '../components/CardComponent';
-
+import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
+import TableFichas from "../components/secciones/Fichas/tableFichas";
+import TableHorarios from "../components/secciones/Fichas/Horarios/tableHorarios";
 
 function FichasPage() {
-  const columns = [
-    'codigo',
-    'inicio_ficha',
-    'fin_lectiva',
-    'fin_ficha',
-    'programa',
-    'sede',
-    'estado'
-    
-  ];
-
-
-
-  return (
+  return ( 
     <>
-      <main className='w-full p-3 h-screen'>
-        <div className='my-5 flex flex-col py-5'>
-
-          <CardComponent title="Fichas Registradas"  />
-          {/* <RegisterArea /> */}
-          <GlobalTable 
-            columns={columns} 
-            dataEndpoint="/fichas/listar" 
-            //updateComponent={UpdateArea} 
-            //deleteComponent={DeleteArea} 
-          />
-        </div>
-
-      </main>
-    </>
-  );
-};
+    <div className="flex min-h-screen flex-col m-10">
+        <Tabs aria-label="Options">
+            <Tab key="fichas" title="fichas">
+              <TableFichas />
+            </Tab>
+            <Tab key="horarios" title="horarios">
+              <TableHorarios />
+            </Tab>
+        </Tabs>
+    </div>
+  </>
+ );
+}
 
 
 export default FichasPage

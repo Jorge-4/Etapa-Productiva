@@ -1,21 +1,22 @@
-import React from 'react';
-//import registerFichas from '../components/secciones/Fichas/registerFichas';
+import React, { useState } from 'react';
 import GlobalTable from '../../componets_globals/GlobalTable';
-//import updateFichas from '../components/secciones/Fichas/updateFichas';
-//import deleteFichas from '../components/secciones/Fichas/deleteFichas'; // Asegúrate de importar correctamente el componente DeleteArea
-import CardComponent from '../../CardComponent';
-
+import RegistroEmpresa from './RegisterEmpresa';
 
 function TableEmpresas() {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleRegisterSuccess = () => {
+    setRefreshTrigger(prev => !prev);
+  };
   const columns = [
-    'razon_social',
-    'direccion',
-    'telefono',
-    'correo',
-    'municipio',
     'jefe_inmediato',
-    'estado'
-    
+    'telefono',
+    'direccion',
+    'correo',
+    'razon_social',
+    'nombre_mpio',
+    'departamento',
+    'estado',
   ];
 
 
@@ -24,14 +25,13 @@ function TableEmpresas() {
     <>
       <main className='w-full p-3 h-screen'>
         <div className='my-5 flex flex-col py-5'>
-
-          <CardComponent title="Empresas Registradas"  />
-          {/* <RegisterArea /> */}
+          <RegistroEmpresa onRegisterSuccess={handleRegisterSuccess}/>
           <GlobalTable 
             columns={columns} 
             dataEndpoint="/empresas/listar" 
+            refreshTrigger={refreshTrigger}
             //updateComponent={UpdateArea} 
-            //deleteComponent={DeleteArea} 
+        
           />
         </div>
 

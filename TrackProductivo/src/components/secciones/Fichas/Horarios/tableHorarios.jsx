@@ -36,7 +36,7 @@ function TableHorariosPage() {
             dataEndpoint="/horarios/listar"
             refreshTrigger={refreshTrigger}
             updateComponent={ActualizarHorario}
-            refreshData={refreshData} // Pasar la función refreshData como prop
+            refreshData={refreshData} 
           />
         </div>
       </main>

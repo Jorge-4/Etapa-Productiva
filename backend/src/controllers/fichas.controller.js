@@ -57,9 +57,13 @@ export const actualizarFicha = async (req, res) => {
     const { inicio_ficha, fin_lectiva, fin_ficha, programa, sede, estado } = req.body;
 
     const sql = `
-        UPDATE fichas 
-        SET inicio_ficha = ?, fin_lectiva = ?, fin_ficha = ?, 
-            programa = ?, sede = ?, estado = ?
+        UPDATE fichas SET 
+        inicio_ficha = ?,
+        fin_lectiva = ?, 
+        fin_ficha = ?, 
+        programa = ?, 
+        sede = ?, 
+        estado = ?
         WHERE codigo = ?
     `;
     try {

@@ -14,6 +14,7 @@ import rutaAmbientes from './src/routes/ambientes.route.js'
 import rutaSeguridad from './src/routes/seguridad.route.js'
 import rutaPrograma from './src/routes/programa.route.js'
 import rutaHorarios from './src/routes/horarios.route.js'
+import rutaMunicipios from './src/routes/municipios.route.js'
 
 const servidor = express()
 
@@ -35,7 +36,7 @@ servidor.use('/empresas', rutaEmpresas)
 servidor.use('/ambientes', rutaAmbientes)
 servidor.use('/programa', rutaPrograma)
 servidor.use('/horarios', rutaHorarios)
-
+servidor.use('/municipios', rutaMunicipios)
 
 servidor.use(express.static('./public'))
 

@@ -2,7 +2,9 @@ import { pool } from "../database/conexion.js";
 
 export const listarEmpresas = async (req, res) => {
     try {
-        let sql = `SELECT * FROM empresas`
+        let sql = `SELECT  e.* , m.*
+         FROM empresas e
+         INNER JOIN municipios m ON e.municipio = m.id_municipio`
 
         const [results] = await pool.query(sql)
 
@@ -24,7 +26,7 @@ export const registrarEmpresas = async (req, res) => {
     try {
         const { razon_social, direccion, telefono, correo, municipio, jefe_inmediato } = req.body
 
-        let sql = `INSERT INTO empresa (razon_social, direccion, telefono, correo, municipio, jefe_inmediato, estado) VALUES (?, ?, ?, ?, ?, ?, 1)`
+        let sql = `INSERT INTO empresas (razon_social, direccion, telefono, correo, municipio, jefe_inmediato, estado) VALUES (?, ?, ?, ?, ?, ?, 1)`
 
         const [rows] = await pool.query(sql, [razon_social, direccion, telefono, correo, municipio, jefe_inmediato])
 
@@ -46,8 +48,8 @@ export const registrarEmpresas = async (req, res) => {
 
 export const actualizarEmpresas = async (req, res) => {
     try {
-        const {id} = req.params
-        const { razon_social, direccion, telefono, correo, municipio, jefe_inmediato } = req.body
+        const {id_empresa} = req.params
+        const { razon_social, direccion, telefono, correo, municipio, jefe_inmediato , estado} = req.body
 
         let sql = `UPDATE empresa SET
                     razon_social = ?,
@@ -56,12 +58,12 @@ export const actualizarEmpresas = async (req, res) => {
                     correo =?,
                     municipio =?,
                     jefe_inmediato =?
-                    
+                    estado = ?
                     WHERE id_empresa = ?`
 
-        const [rows] = await pool.query(sql, [razon_social, direccion, telefono, correo, municipio, jefe_inmediato, id])
+        const [rows] = await pool.query(sql, [razon_social, direccion, telefono, correo, municipio, jefe_inmediato, id_empresa , estado])
 
-        if(rows.affectedRows>0){
+        if(rows.affectedRows === 0){
             res.status(200).json({
                 message: 'Empresa actualizada correctamente'
             })

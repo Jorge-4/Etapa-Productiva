@@ -5,6 +5,9 @@ import ActualizarFicha from './updateFichas';
 
 function TableFichasPage() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const handleRegisterSuccess = () => {
+    setRefreshTrigger(prev => !prev);
+  };
 
   const columns = [
     'codigo',
@@ -17,9 +20,6 @@ function TableFichasPage() {
   
   ];
 
-  const handleRegisterSuccess = () => {
-    setRefreshTrigger(prev => !prev);
-  };
 
   return (
     <>

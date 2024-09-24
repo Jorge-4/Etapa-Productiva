@@ -72,7 +72,6 @@ export const actualizarFicha = async (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'No se encontró la ficha para actualizar' });
         }
-
         res.status(200).json({ message: 'Ficha actualizada con éxito' });
     } catch (error) {
         console.error('Error en actualizarFicha:', error);

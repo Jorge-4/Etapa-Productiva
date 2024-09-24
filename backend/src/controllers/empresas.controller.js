@@ -47,36 +47,27 @@ export const registrarEmpresas = async (req, res) => {
 }
 
 export const actualizarEmpresas = async (req, res) => {
-    try {
-        const {id_empresa} = req.params
-        const { razon_social, direccion, telefono, correo, municipio, jefe_inmediato , estado} = req.body
-
-        let sql = `UPDATE empresa SET
-                    razon_social = ?,
-                    direccion =?,
-                    telefono =?,
-                    correo =?,
-                    municipio =?,
-                    jefe_inmediato =?
-                    estado = ?
-                    WHERE id_empresa = ?`
-
-        const [rows] = await pool.query(sql, [razon_social, direccion, telefono, correo, municipio, jefe_inmediato, id_empresa , estado])
-
-        if(rows.affectedRows === 0){
-            res.status(200).json({
-                message: 'Empresa actualizada correctamente'
-            })
-        }else{
-            res.status(403).json({
-                message: 'Error al actualizar la empresa'
-            })
-        }
-    } catch (error) {
-        res.status(500).json({
-            message: 'Error del servidor' + error
-        })
+   const { id_empresa } = req.params
+   const { razon_social, direccion, telefono, correo, municipio, jefe_inmediato, estado } = req.body
+   const sql = `
+   UPDATE empresas SET 
+   razon_social = ?, 
+   direccion = ?, 
+   telefono = ?, 
+   correo = ?, 
+   municipio = ?, 
+   jefe_inmediato = ?, 
+   estado = ? 
+   WHERE id_empresa = ?`;
+   try {
+    const [result] = await pool.query(sql, [razon_social, direccion, telefono, correo, municipio, jefe_inmediato, estado, id_empresa]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Empresa no encontrada' });
     }
+    res.status(200).json({ message: 'Empresa actualizada correctamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error del servidor' + error });
+  }
 }
 
 export const inactivarEmpresa = async (req, res) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GlobalTable from '../../componets_globals/GlobalTable';
 import RegistroEmpresa from './RegisterEmpresa';
+import UpdateEmpresa from './updateEmpresa';
 
 function TableEmpresas() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -30,7 +31,7 @@ function TableEmpresas() {
             columns={columns} 
             dataEndpoint="/empresas/listar" 
             refreshTrigger={refreshTrigger}
-            //updateComponent={UpdateArea} 
+            updateComponent={UpdateEmpresa} 
         
           />
         </div>

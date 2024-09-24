@@ -32,7 +32,7 @@ const GlobalTable = ({ columns, dataEndpoint, updateComponent: UpdateComponent, 
   useEffect(() => {
     fetchData();
   }, [dataEndpoint, refreshTrigger]);
-
+  
   useEffect(() => {
     setTotalPages(Math.ceil(data.length / rowsPerPage));
   }, [data, rowsPerPage]);
@@ -110,7 +110,7 @@ const GlobalTable = ({ columns, dataEndpoint, updateComponent: UpdateComponent, 
               ))}
               <TableCell>
                 <button
-                  className="bg-transparent hover:bg-gray-300 text-gray-600 font-normal py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out mr-2"
+                  className="bg-transparent bg-lime-400 hover:bg-lime-500 text-gray-100 font-normal py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out mr-2"
                   onClick={() => handleUpdateClick(item)}
                 >
                   Actualizar

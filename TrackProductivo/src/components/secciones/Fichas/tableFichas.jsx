@@ -18,7 +18,7 @@ function TableFichasPage() {
   ];
 
   const handleRegisterSuccess = () => {
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger(prev => !prev);
   };
 
   return (

@@ -110,7 +110,7 @@ const GlobalTable = ({ columns, dataEndpoint, updateComponent: UpdateComponent, 
               ))}
               <TableCell>
                 <button
-                  className="bg-transparent bg-lime-400 hover:bg-lime-500 text-gray-100 font-normal py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out mr-2"
+                  className="bg-transparent bg-lime-400 hover:bg-lime-500 text-gray-900 font-normal py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 ease-in-out mr-2"
                   onClick={() => handleUpdateClick(item)}
                 >
                   Actualizar
